@@ -1,0 +1,32 @@
+-- 1
+SELECT WORKDEPT, EMPNO, LASTNAME, SALARY
+  FROM EMPLOYEE
+  WHERE SALARY >= (SELECT AVG(SALARY) FROM EMPLOYEE) + 5000
+  ORDER BY WORKDEPT, EMPNO;
+  
+-- 2
+SELECT EMPNO, LASTNAME
+  FROM EMPLOYEE
+  WHERE EMPNO NOT IN (SELECT EMPNO
+                        FROM EMP_ACT);
+                        
+-- 3
+SELECT PROJNO, DAYS(PRENDATE) - DAYS(PRSTDATE) AS DAYS
+  FROM PROJECT
+  WHERE DAYS(PRENDATE) - DAYS(PRSTDATE) = (SELECT MIN(DAYS(PRENDATE) - DAYS(PRSTDATE))
+                                             FROM PROJECT);
+                                             
+-- 4
+SELECT WORKDEPT, DEPTNAME, LASTNAME, FIRSTNME
+  FROM DEPARTMENT, EMPLOYEE 
+  WHERE WORKDEPT = DEPTNO AND DEPTNO NOT IN (SELECT WORKDEPT
+                                               FROM EMPLOYEE
+                                               WHERE SEX = 'F');
+                                               
+-- 5
+SELECT LASTNAME, JOB, EDLEVEL, YEAR('2000-01-01' - HIREDATE) AS YEARS, SALARY
+  FROM EMPLOYEE
+  WHERE (JOB, EDLEVEL) IN (SELECT JOB, EDLEVEL
+                            FROM EMPLOYEE
+                            WHERE LASTNAME = 'STERN')
+  ORDER BY SALARY DESC;
